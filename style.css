@@ -1,0 +1,255 @@
+:root {
+    --bg-primary: #020617;
+    --bg-secondary: rgba(15, 23, 42, 0.7);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.5);
+    
+    --color-anion: #ef4444;    /* Red for Negative Ion */
+    --color-cation: #3b82f6;   /* Blue for Positive Ion */
+    --color-electron: #fbbf24; /* Yellow for Electron */
+    --color-hole: #a855f7;     /* Purple for Hole */
+    --color-photon: #10b981;   /* Green/Glow for Light */
+    
+    --lumo-color: #fbbf24;
+    --homo-color: #a855f7;
+    
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-primary);
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.05), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.05), transparent 25%);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+.app-container {
+    display: flex;
+    height: 100vh;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+.glass-panel {
+    background: var(--bg-secondary);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+/* --- Left Panel --- */
+.control-panel {
+    flex: 0 0 420px;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 2rem;
+    overflow-y: auto;
+}
+header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    background: linear-gradient(90deg, #38bdf8, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+.description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+/* Controls */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.control-group label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+.control-group label span {
+    color: var(--accent);
+}
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -6px;
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: transform 0.1s;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+.metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.metric-box {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.metric-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.metric-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+/* Graph Section */
+.graph-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+#bandGraph {
+    width: 100%;
+    height: 200px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+.graph-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+.color-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+.color-box.lumo { background-color: var(--lumo-color); }
+.color-box.homo { background-color: var(--homo-color); }
+/* --- Right Panel --- */
+.simulation-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+}
+.canvas-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#simCanvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.overlay-labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.overlay-labels .label {
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(4px);
+}
+/* Approximate positions, will be fine-tuned or we just draw text on canvas */
+.source-label { top: 20px; left: 20px; }
+.drain-label { top: 20px; right: 20px; }
+.gate-label { bottom: 20px; left: 50%; transform: translateX(-50%); }
+.legend {
+    padding: 1rem 1.5rem;
+}
+.legend h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+.legend-grid {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.particle {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.p-anion { background-color: var(--color-anion); box-shadow: 0 0 5px var(--color-anion); }
+.p-cation { background-color: var(--color-cation); box-shadow: 0 0 5px var(--color-cation); }
+.p-electron { background-color: var(--color-electron); box-shadow: 0 0 5px var(--color-electron); }
+.p-hole { background-color: var(--color-hole); box-shadow: 0 0 5px var(--color-hole); }
+.p-photon { background-color: var(--color-photon); box-shadow: 0 0 8px var(--color-photon); border-radius: 50%; transform: scale(1.2); }
