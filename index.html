@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLET 물리 시뮬레이션</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel: Controls and Graphs -->
+        <aside class="control-panel glass-panel">
+            <header>
+                <h1>OLET 시뮬레이션</h1>
+                <p class="subtitle">단일 활성층 유기발광트랜지스터</p>
+                <div class="description">
+                    차세대 단일 활성층 유기발광트랜지스터(OLET)의 물리적 구동 원리를 탐구해 보세요. 전압을 조절하여 전기이중층(EDL) 형성, 에너지 밴드 휨(Band Bending), 양자 터널링 및 발광 현상을 관찰할 수 있습니다.
+                </div>
+            </header>
+            <section class="controls">
+                <div class="control-group">
+                    <label for="vds-slider">
+                        <div class="label-with-tooltip">
+                            드레인-소스 전압 (V<sub>DS</sub>)
+                            <span class="tooltip-wrap">
+                                <span class="info-icon">?</span>
+                                <div class="tooltip-content">
+                                    <strong>수평 전기장 조절 (발광 스위치)</strong><br>
+                                    값을 올리면 이온들이 전극 양끝으로 강하게 몰려 '전기이중층(EDL)'을 만듭니다. 이때 장벽이 얇아져 전자와 정공이 쉽게 통과하게 되고(양자 터널링), 서로 만나 빛을 내기 시작합니다.
+                                </div>
+                            </span>
+                        </div>
+                        <span><span id="vds-val">0.0</span> V</span>
+                    </label>
+                    <input type="range" id="vds-slider" min="-3" max="3" step="0.1" value="0">
+                    <div class="slider-labels"><span>-3V</span><span>0V</span><span>+3V</span></div>
+                </div>
+                <div class="control-group">
+                    <label for="vgs-slider">
+                        <div class="label-with-tooltip">
+                            게이트-소스 전압 (V<sub>GS</sub>)
+                            <span class="tooltip-wrap">
+                                <span class="info-icon">?</span>
+                                <div class="tooltip-content">
+                                    <strong>수직 전기장 조절 (발광 위치 제어)</strong><br>
+                                    아래쪽 게이트 전극의 전압을 조절합니다. 이 전압은 입자들을 끌어당기거나 밀어내며, 전자와 정공이 만나 <b>빛을 내는 위치(초록색 발광 구역)를 위아래 및 좌우로 이동</b>시킵니다.
+                                </div>
+                            </span>
+                        </div>
+                        <span><span id="vgs-val">0.0</span> V</span>
+                    </label>
+                    <input type="range" id="vgs-slider" min="-3" max="3" step="0.1" value="0">
+                    <div class="slider-labels"><span>-3V</span><span>0V</span><span>+3V</span></div>
+                </div>
+                
+                <div class="metrics">
+                    <div class="metric-box">
+                        <div class="label-with-tooltip metric-title">
+                            <span class="metric-label">국소 전기장 (E)</span>
+                            <span class="tooltip-wrap">
+                                <span class="info-icon">?</span>
+                                <div class="tooltip-content">
+                                    <strong>전극 표면의 막대한 힘</strong><br>
+                                    이온들이 전극 표면에 아주 가깝게(약 2nm) 모이면서 생기는 강력한 전기장입니다. 겨우 3V만 걸어도 번개와 맞먹는 엄청난 세기(10<sup>9</sup> V/m)가 되어 전자를 억지로 끌어옵니다.
+                                </div>
+                            </span>
+                        </div>
+                        <span class="metric-value" id="electric-field">0.00 x 10<sup>9</sup> V/m</span>
+                    </div>
+                    <div class="metric-box">
+                        <div class="label-with-tooltip metric-title">
+                            <span class="metric-label">터널링 투과 계수 (T)</span>
+                            <span class="tooltip-wrap">
+                                <span class="info-icon">?</span>
+                                <div class="tooltip-content">
+                                    <strong>장벽을 통과할 양자역학적 확률</strong><br>
+                                    강력한 국소 전기장에 의해 장벽이 매우 얇아져서, 입자가 산을 넘지 않고 유령처럼 <b>통과(터널링)</b>해버릴 확률입니다. 수치가 커질수록 입자 주입이 활발해집니다.
+                                </div>
+                            </span>
+                        </div>
+                        <span class="metric-value" id="tunneling-prob">~ 0</span>
+                    </div>
+                </div>
+            </section>
+            <section class="graph-section">
+                <div class="label-with-tooltip title-tooltip">
+                    <h3>에너지 밴드 다이어그램</h3>
+                    <span class="tooltip-wrap">
+                        <span class="info-icon">?</span>
+                        <div class="tooltip-content">
+                            <strong>장벽이 얇아지는 마법(에너지 밴드 휨)</strong><br>
+                            전압(V<sub>DS</sub>)을 높이면 양 끝의 선(에너지 밴드)이 가파르게 아래로 휘어집니다. 직사각형이었던 벽이 <b>얇은 삼각형</b>으로 변하면서 입자가 쉽게 통과(터널링)할 수 있게 됩니다.
+                        </div>
+                    </span>
+                </div>
+                <canvas id="bandGraph" width="400" height="200"></canvas>
+                <div class="graph-legend">
+                    <span class="legend-item"><span class="color-box lumo"></span>LUMO (전자 수송)</span>
+                    <span class="legend-item"><span class="color-box homo"></span>HOMO (정공 수송)</span>
+                </div>
+            </section>
+        </aside>
+        <!-- Right Panel: Device Simulation -->
+        <main class="simulation-panel">
+            <div class="canvas-container glass-panel">
+                <canvas id="simCanvas" width="800" height="600"></canvas>
+                <div class="overlay-labels">
+                    <div class="label source-label">소스 (Source, S)</div>
+                    <div class="label drain-label">드레인 (Drain, D)</div>
+                    <div class="label gate-label">게이트 (Gate, G)</div>
+                </div>
+            </div>
+            <div class="legend glass-panel">
+                <h4>범례 (입자 가이드)</h4>
+                <div class="legend-grid">
+                    <div class="legend-item"><span class="particle p-anion"></span> 음이온 (Anion, -)</div>
+                    <div class="legend-item"><span class="particle p-cation"></span> 양이온 (Cation, +)</div>
+                    <div class="legend-item"><span class="particle p-electron"></span> 전자 (Electron, e⁻)</div>
+                    <div class="legend-item"><span class="particle p-hole"></span> 정공 (Hole, h⁺)</div>
+                    <div class="legend-item"><span class="particle p-photon"></span> 광자 (Photon, 발광)</div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
