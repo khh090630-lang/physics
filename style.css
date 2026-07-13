@@ -292,8 +292,8 @@ input[type=range]::-webkit-slider-thumb:hover {
     opacity: 0;
     position: absolute;
     bottom: 150%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
+    left: -10px; /* Default left anchor */
+    transform: translateY(10px);
     width: max-content;
     max-width: 280px;
     background: rgba(15, 23, 42, 0.95);
@@ -321,5 +321,14 @@ input[type=range]::-webkit-slider-thumb:hover {
 .tooltip-wrap:hover .tooltip-content {
     visibility: visible;
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
+}
+/* Modifier for right-aligned tooltips (prevents clipping on right edge) */
+.tooltip-wrap.tooltip-right .tooltip-content {
+    left: auto;
+    right: -10px;
+    transform: translateY(10px);
+}
+.tooltip-wrap.tooltip-right:hover .tooltip-content {
+    transform: translateY(0);
 }
